@@ -1,0 +1,20 @@
+services:
+
+  postgres_master:
+    image: postgres:16
+    container_name: postgres_master
+
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: vocab_db
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+volumes:
+  postgres_data:
