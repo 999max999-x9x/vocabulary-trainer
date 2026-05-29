@@ -1,4 +1,25 @@
+from core_service.services.user_service import (
+    create_user,
+    get_users
+)
+
+from core_service.services.collection_service import (
+    create_collection,
+    get_collections
+)
+
+from core_service.services.word_service import (
+    add_word,
+    get_words,
+    delete_word
+)
+
+from core_service.services.progress_service import (
+    get_all_collections_progress
+)
+
 from datetime import date
+
 import random
 
 

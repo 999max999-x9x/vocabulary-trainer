@@ -1,0 +1,3 @@
+@app.get("/about")
+def about():
+    return {"test": "ok"}
