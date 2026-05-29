@@ -1,4 +1,4 @@
-from database.connection import get_connection
+from core_service.database.connection import get_connection
 
 
 def create_collection(name, user_id):

@@ -1,3 +1,6 @@
+from fastapi.templating import Jinja2Templates
+from fastapi import Request
+
 from core_service.services.user_service import (
     create_user,
     get_users
@@ -34,6 +37,7 @@ from core_service.database.connection import get_connection
 
 app = FastAPI()
 
+templates = Jinja2Templates(directory="templates")
 
 @app.get("/")
 def home():
@@ -105,145 +109,12 @@ def check(word_id: int, answer: str):
             "correct": word[2]
         }
 
-@app.get("/ui", response_class=HTMLResponse)
-def ui():
-    return """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Vocabulary Trainer</title>
-
-        <style>
-
-            body{
-                margin:0;
-                font-family:Arial;
-                background:#0f0f0f;
-                color:white;
-            }
-
-            .container{
-                padding:40px;
-            }
-
-            h1{
-                font-size:48px;
-            }
-
-            button{
-                padding:12px 20px;
-                margin:10px;
-                border:none;
-                border-radius:10px;
-                cursor:pointer;
-                font-size:16px;
-            }
-
-            .card{
-                background:#1c1c1c;
-                padding:20px;
-                border-radius:16px;
-                margin-top:20px;
-            }
-
-        </style>
-
-    </head>
-
-    <body>
-
-        <div class="container">
-
-            <h1>Vocabulary Trainer</h1>
-
-            <button onclick="loadUsers()">Users</button>
-
-            <button onclick="loadCollections()">
-                Collections
-            </button>
-
-            <button onclick="loadWords()">
-                Words
-            </button>
-
-            <button onclick="loadTraining()">
-                Training
-            </button>
-
-            <button onclick="loadProgress()">
-                Progress
-            </button>
-
-            <div id="output" class="card">
-
-                Data will appear here
-
-            </div>
-
-        </div>
-
-        <script>
-
-            async function loadUsers(){
-
-                let res = await fetch("/users")
-
-                let data = await res.json()
-
-                document.getElementById("output").innerHTML =
-                    JSON.stringify(data,null,2)
-
-            }
-
-            async function loadCollections(){
-
-                let res = await fetch("/collections")
-
-                let data = await res.json()
-
-                document.getElementById("output").innerHTML =
-                    JSON.stringify(data,null,2)
-
-            }
-
-            async function loadWords(){
-
-                let res = await fetch("/words")
-
-                let data = await res.json()
-
-                document.getElementById("output").innerHTML =
-                    JSON.stringify(data,null,2)
-
-            }
-
-            async function loadTraining(){
-
-                let res = await fetch("/train")
-
-                let data = await res.json()
-
-                document.getElementById("output").innerHTML =
-                    JSON.stringify(data,null,2)
-
-            }
-
-            async function loadProgress(){
-
-                let res = await fetch("/progress")
-
-                let data = await res.json()
-
-                document.getElementById("output").innerHTML =
-                    JSON.stringify(data,null,2)
-
-            }
-
-        </script>
-
-    </body>
-    </html>
-    """
+@app.get("/ui")
+def ui(request: Request):
+    return templates.TemplateResponse(
+        "index.html",
+        {"request": request}
+    )
 
 @app.post("/users")
 def create_user_api(username: str, password: str):

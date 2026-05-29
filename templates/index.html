@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Vocabulary Trainer</title>
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:Arial;
+            background:#0f0f0f;
+            color:white;
+        }
+
+        .container{
+            padding:40px;
+        }
+
+        h1{
+            font-size:48px;
+        }
+
+        button{
+            padding:12px 20px;
+            margin:10px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            font-size:16px;
+        }
+
+        .card{
+            background:#1c1c1c;
+            padding:20px;
+            border-radius:16px;
+            margin-top:20px;
+            white-space: pre-wrap;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Vocabulary Trainer</h1>
+
+        <div class="auth-buttons">
+
+    <button onclick="showLogin()">
+        Login
+    </button>
+
+    <button onclick="showRegister()">
+        Register
+    </button>
+
+</div>
+
+        <div id="output" class="card">
+
+    Welcome to Vocabulary Trainer
+
+</div>
+
+    </div>
+
+    <script>
+
+        function showLogin(){
+
+    document.getElementById("output").innerHTML = `
+
+        <h2>Login</h2>
+
+        <input
+            type="text"
+            placeholder="Username"
+            id="login-username"
+        >
+
+        <input
+            type="password"
+            placeholder="Password"
+            id="login-password"
+        >
+
+        <button>
+            Login
+        </button>
+
+    `
+}
+
+function showRegister(){
+
+    document.getElementById("output").innerHTML = `
+
+        <h2>Register</h2>
+
+        <input
+            type="text"
+            placeholder="Username"
+            id="register-username"
+        >
+
+        <input
+            type="password"
+            placeholder="Password"
+            id="register-password"
+        >
+
+        <button>
+            Register
+        </button>
+
+    `
+}
+
+        async function loadUsers(){
+
+            let res = await fetch("/users")
+
+            let data = await res.json()
+
+            let html = ""
+
+for(let user of data){
+
+    html += `
+
+    <div class="user-card">
+
+        <h2> ${user[1]}</h2>
+
+        <p>ID: ${user[0]}</p>
+
+    </div>
+
+    `
+}
+
+document.getElementById("output").innerHTML = html
+
+        }
+
+        async function loadCollections(){
+
+            let res = await fetch("/collections")
+
+            let data = await res.json()
+
+            document.getElementById("output").innerHTML =
+                JSON.stringify(data,null,2)
+
+        }
+
+        async function loadWords(){
+
+            let res = await fetch("/words")
+
+            let data = await res.json()
+
+            document.getElementById("output").innerHTML =
+                JSON.stringify(data,null,2)
+
+        }
+
+        async function loadTraining(){
+
+            let res = await fetch("/train")
+
+            let data = await res.json()
+
+            document.getElementById("output").innerHTML =
+                JSON.stringify(data,null,2)
+
+        }
+
+        async function loadProgress(){
+
+            let res = await fetch("/progress")
+
+            let data = await res.json()
+
+            document.getElementById("output").innerHTML =
+                JSON.stringify(data,null,2)
+
+        }
+
+    </script>
+
+</body>
+
+</html>
